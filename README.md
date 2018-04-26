@@ -1,3 +1,18 @@
+#Demo : 
+https://dhiraj1411.github.io/box-plot-combined-with-line-chart/
+
+#Description : 
+Requirement : 
+    Box plot will depicts the history.
+    Horizontal Straight line shows threshold/expected value.
+    Colored line shows the current value. 
+        - Color of line depends on position of last node of the line
+         e.g 
+            - At key "1", the node is in the whiskers range but not in the quartile so the color of line is YELLOW.
+            - At key "2", the node lies outside the whiskers so the color of line is "RED".
+            - At key "9", the node lies inside the quartile so the color of line is "GREEN".
+
+
 # BoxPlotWithLineChart
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
