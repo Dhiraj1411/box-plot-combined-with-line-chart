@@ -77,7 +77,7 @@ export class AppComponent implements OnInit {
       .range([0, this.height]);
 
     // Setup the svg and group we will draw the box plot in
-    this.svg = d3.select('div').append('svg')
+    this.svg = d3.select('#chartDiv').append('svg')
       .attr('width', this.totalWidth)
       .attr('height', this.totalheight)
       .append('g')
@@ -90,8 +90,6 @@ export class AppComponent implements OnInit {
     // Setup the group the box plot elements will render in
     const g = this.svg.append('g')
       .attr('transform', 'translate(25,0)');
-
-
 
     // Draw the box plot vertical lines
     const verticalLines = g.selectAll('.verticalLines')
@@ -121,6 +119,11 @@ export class AppComponent implements OnInit {
       .attr('stroke-width', 1)
       .attr('fill', 'none');
 
+    const rectToolTipDiv = d3.select('#chartDiv').append('div')
+      .attr('class', 'tooltip')
+      .style('opacity', 0)
+      .style('position', 'absolute');
+
     // Draw the boxes of the box plot, filled in white and on top of vertical lines
     const rects = g.selectAll('rect')
       .data(boxPlotData)
@@ -146,7 +149,39 @@ export class AppComponent implements OnInit {
       }
       )
       .attr('stroke', (datum) => datum.color)
-      .attr('stroke-width', 1);
+      .attr('stroke-width', 1)
+      .on('mouseover', (d) => {
+        console.log(d);
+        let twentyFivePercent = d['quartile']['0'];
+        let FiftyPercent = d['quartile']['1'];
+        let seventyFivePercent = d['quartile']['2'];
+
+        twentyFivePercent = Number(twentyFivePercent).toFixed(2);
+        FiftyPercent = Number(FiftyPercent).toFixed(2);
+        seventyFivePercent = Number(seventyFivePercent).toFixed(2);
+
+        rectToolTipDiv.transition()
+          .duration(500)
+          .style('display', 'block')
+          .style('opacity', .9);
+        rectToolTipDiv.html(
+          'P25 = ' + twentyFivePercent + ' <br/> ' + 'Avg = ' + FiftyPercent + ' <br/> ' + 'P75 = ' + seventyFivePercent
+        )
+          .style('padding', 10 + 'px')
+          .style('font-weight', 700)
+          .style('font-size', '12px')
+          .style('font-family', '12px')
+          .style('background-color', 'sans-serif')
+          .style('border', '1px solid')
+          .style('border-radius', '10px')
+          .style('left', (d3.event.pageX) + 10 + 'px')
+          .style('top', (d3.event.pageY - 28) + 'px');
+      })
+      .on('mouseout', (d) => {
+        rectToolTipDiv.transition()
+          .duration(500)
+          .style('display', 'none');
+      });
 
     // Now render all the horizontal lines at once - the whiskers and the median
     const horizontalLineConfigs = [
@@ -285,6 +320,10 @@ export class AppComponent implements OnInit {
       }
     }
 
+    const medianLineAnimation = d3.transition()
+      .duration(1000)
+      .ease(d3.easeLinear);
+
     this.svg.append('path')
       .data([median])
       .attr('d', plotLine)
@@ -292,6 +331,11 @@ export class AppComponent implements OnInit {
       .attr('stroke-width', '2')
       .attr('transform', 'translate(35,0)')
       .attr('fill', 'none');
+
+    const dotToolTip = d3.select('#chartDiv').append('div')
+      .attr('class', 'tooltip')
+      .style('opacity', 0)
+      .style('position', 'absolute');
 
     // 12. Appends a circle for each datapoint
     this.svg.selectAll('.dot')
@@ -302,7 +346,28 @@ export class AppComponent implements OnInit {
       .attr('cy', (d) => yScale(d.y))
       .attr('transform', 'translate(35,0)')
       .style('fill', 'green')
-      .attr('r', 5);
+      .attr('r', 5)
+      .on('mouseover', (d) => {
+        dotToolTip.transition()
+          .duration(500)
+          .style('display', 'block')
+          .style('opacity', .9);
+        dotToolTip.html('(' + d['x'] + ', ' + d['y'] + ')')
+          .style('padding', 10 + 'px')
+          .style('font-weight', 700)
+          .style('font-size', '12px')
+          .style('font-family', '12px')
+          .style('background-color', 'sans-serif')
+          .style('border', '1px solid')
+          .style('border-radius', '10px')
+          .style('left', (d3.event.pageX) + 10 + 'px')
+          .style('top', (d3.event.pageY - 28) + 'px');
+      })
+      .on('mouseout', (d) => {
+        dotToolTip.transition()
+          .duration(500)
+          .style('display', 'none');
+      });
   }
 }
 interface ChartData {
