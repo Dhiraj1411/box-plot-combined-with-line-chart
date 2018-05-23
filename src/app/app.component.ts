@@ -165,7 +165,7 @@ export class AppComponent implements OnInit {
           .style('display', 'block')
           .style('opacity', .9);
         rectToolTipDiv.html(
-          'P25 = ' + twentyFivePercent + ' <br/> ' + 'Avg = ' + FiftyPercent + ' <br/> ' + 'P75 = ' + seventyFivePercent
+          'P75 = ' + seventyFivePercent + ' <br/> ' + 'Avg = ' + FiftyPercent + ' <br/> ' + 'P25 = ' + twentyFivePercent
         )
           .style('padding', 10 + 'px')
           .style('font-weight', 700)
@@ -320,9 +320,9 @@ export class AppComponent implements OnInit {
       }
     }
 
-    const medianLineAnimation = d3.transition()
-      .duration(1000)
-      .ease(d3.easeLinear);
+    // const medianLineAnimation = d3.transition()
+    //   .duration(1000)
+    //   .ease(d3.easeLinear);
 
     this.svg.append('path')
       .data([median])
