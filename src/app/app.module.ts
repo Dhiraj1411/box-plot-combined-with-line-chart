@@ -1,8 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-
 import { AppComponent } from './app.component';
+import { BoxPlotWithLineModule } from '../../projects/box-plot-with-line/src/public_api';
 
 
 @NgModule({
@@ -10,7 +9,8 @@ import { AppComponent } from './app.component';
     AppComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    BoxPlotWithLineModule
   ],
   providers: [],
   bootstrap: [AppComponent]
