@@ -31,7 +31,7 @@ export class BoxPlotWithLineComponent implements OnInit {
   yMax;
   yMin;
 
-  @Input() options: DataInput;
+  @Input() options: any;
   constructor() { }
 
   ngOnInit() {
